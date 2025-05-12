@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Te Amo 💘</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffe6f0;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      flex-direction: column;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .container {
+      text-align: center;
+      color: #b30059;
+      width: 90%;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      margin-bottom: 0.5em;
+    }
+
+    .typing {
+      font-size: 1.3em;
+      height: 40px;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 3px solid;
+      animation: blink 0.7s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .button {
+      margin-top: 30px;
+      padding: 10px 25px;
+      font-size: 1.1em;
+      background-color: #ff66a3;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .button:hover {
+      background-color: #ff3385;
+    }
+
+    .hidden-message {
+      opacity: 0;
+      transition: opacity 1.2s ease-in;
+      margin-top: 25px;
+      font-size: 1.2em;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      max-height: 0;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      line-height: 1.6;
+    }
+
+    .show {
+      opacity: 1;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    /* Scrollbar suave */
+    .hidden-message::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .hidden-message::-webkit-scrollbar-thumb {
+      background: #ff66a3;
+      border-radius: 8px;
+    }
+
+    .hidden-message::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="hearts"></canvas>
+
+  <div class="container">
+    <h1>Para o amor da minha vida 💖</h1>
+    <div class="typing" id="typing-text"></div>
+
+    <button class="button" onclick="showMessage()">Clique aqui</button>
+
+    <div class="hidden-message" id="message">
+      <!-- Coloque seu texto longo aqui -->
+      Você sabia que nós nunca precisamos de muito para nos divertir? Nunca precisamos de mais do que a companhia um do outro, estando com você, até uma idá na padaria já é especial, se não tem carro, vamos a pé, se não tem dinheiro comemos em casa, e se não tiver tempo, a gente se vê rapidinho, é tão bom ver quem faz de tudo para te ver, qualquer coisa é motivo para ela te mandar mensagem perguntando, aonde está? o que está fazendo? posso ir aí? e daí o que era um dia aleatório se torna a melhor parte da semana, renova nossas energias, voltamos mais felizes... Para mim dia útil é aquele em que eu passo com você, porque você eterniza uma hora pequena ou um momento simples, fazendo com que uma simples volta no condomínio faça a vida valer a pena.<br><br>
+  </div>
+
+  <script>
+    // Digitação
+    const text = "Você é meu presente mais precioso...";
+    let index = 0;
+    function type() {
+      if (index < text.length) {
+        document.getElementById('typing-text').textContent += text.charAt(index);
+        index++;
+        setTimeout(type, 100);
+      }
+    }
+    type();
+
+    // Mostrar mensagem
+    function showMessage() {
+      document.getElementById("message").classList.add("show");
+    }
+
+    // Corações flutuando
+    const canvas = document.getElementById("hearts");
+    const ctx = canvas.getContext("2d");
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    const hearts = [];
+
+    function Heart() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.size = Math.random() * 8 + 2;
+      this.speed = Math.random() * 1 + 0.5;
+      this.opacity = Math.random();
+
+      this.draw = function () {
+        ctx.fillStyle = `rgba(255, 105, 180, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.bezierCurveTo(this.x - 5, this.y - 5, this.x - 5, this.y + 5, this.x, this.y + 10);
+        ctx.bezierCurveTo(this.x + 5, this.y + 5, this.x + 5, this.y - 5, this.x, this.y);
+        ctx.fill();
+      };
+
+      this.update = function () {
+        this.y -= this.speed;
+        if (this.y < 0) {
+          this.y = height;
+          this.x = Math.random() * width;
+        }
+        this.draw();
+      };
+    }
+
+    function initHearts() {
+      for (let i = 0; i < 100; i++) {
+        hearts.push(new Heart());
+      }
+    }
+
+    function animateHearts() {
+      ctx.clearRect(0, 0, width, height);
+      hearts.forEach((heart) => heart.update());
+      requestAnimationFrame(animateHearts);
+    }
+
+    initHearts();
+    animateHearts();
+  </script>
+</body>
+</html>
